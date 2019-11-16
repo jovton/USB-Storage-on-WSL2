@@ -90,7 +90,7 @@ localhostForwarding=true
 ```
 > wsl --shutdown
 ```
-- Open you WSL2 bash session again and load the iscsi modules. Before you can use iSCSI these modules must always be loaded first.
+- Open your WSL2 bash session again and load the iscsi modules. Before you can use iSCSI these modules must always be loaded first.
 
 ```
 $ sudo modprobe -v libiscsi
