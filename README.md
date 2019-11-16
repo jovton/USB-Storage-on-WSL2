@@ -11,7 +11,7 @@ This article describes how you can access your USB storage device from Microsoft
 - Use your USB drive on the WSL2 as normal (it will be listed on your /dev directory as "*sdb*" or "*sdc*" etc).
 
 ## Motivation
-If you (like me) have tried to access your usb storage device on WSL2, you probably (to your dismay) discovered that it is not (yet) listed as a block device under */dev* as you would expect, such as */dev/sda*, */dev/sdb* or */dev/sdc*, etc. So you cannot mount it, format it, or do other things that you normally can with block devices on a Linux installation. The reason for this that, as at this writing, Microsoft has not yet fully implemented block device support in WSL2. See this github issue: https://github.com/Microsoft/WSL/issues/689
+If you have tried, just as I have, to access your USB storage device on WSL2, then you probably, to your dismay, discovered that it is not listed as a block device under */dev* as you would expect, such as */dev/sda*, */dev/sdb* or */dev/sdc*, etc. As a virtualiztion guest, WSL2 does not detect-, respond to-, or handle USB devices being plugged into the host. So you cannot mount it, format it, or do other things that you normally can with block devices on a Linux installation. The reason for this that, as at this writing, Microsoft has not yet fully implemented block device support in WSL2. See this github issue: https://github.com/Microsoft/WSL/issues/689.
 
 This article will show you how you can get around these limitations to access your USB drive on WSL2 as you would normally access a block device that is listed under the */dev* directory, using iSCSI. There are other ways too, such as USB/IP, but it did not work for me because under Windows my USB storage device was classified as a "*hub/controller*". Using iSCSI instead allowed this detail to be insignificant.
 
@@ -90,7 +90,7 @@ localhostForwarding=true
 ```
 > wsl --shutdown
 ```
-- Open your WSL2 bash session again and load the iscsi modules. Before you can use iSCSI these modules must always be loaded first.
+- Open your WSL2 bash session again and load the iSCSI modules. Before you can use iSCSI these modules must always be loaded first.
 
 ```
 $ sudo modprobe -v libiscsi
@@ -169,7 +169,7 @@ Device     Boot Start      End  Sectors Size Id Type
 /dev/sdb1  *     2048 62914559 62912512  30G  b W95 FAT32
 ```
 
-Now you use the USB drive from your WSL2 instance to your heart's desire! Mount it, format it, encrypt it, anything you wish.
+Now you can use the USB drive from your WSL2 instance to your heart's desire! Mount it, format it, encrypt it, anything you wish.
 
 ## Conclusion
 Using iSCSI, we were able to "fool" WSL2 into thinking it had a physical USB block device attached under "/dev".
