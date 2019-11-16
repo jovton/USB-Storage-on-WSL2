@@ -111,7 +111,7 @@ Picture: [Selecting a Physical Disk][2]
 Once you've got that up and running, you can connect to it from your WSL2 instance.
 
 ### 5. <u>The iSCSI Initiator</u>
-Now you must set up a client/initiator on my WSL2 instance. We're going to use a tool called "*open-iscsi*" for Linux, but it requires systemd, and systemd is not enabled on WSL2 by default. But it is very easy to do. Here is a **very short** guide on how to do that: https://forum.snapcraft.io/t/running-snaps-on-wsl2-insiders-only-for-now/13033. You can skip the snap parts.
+Now we must set up a client/initiator on our WSL2 instance. We're going to use a tool called "*open-iscsi*" for Linux, but it requires systemd, and systemd is not enabled on WSL2 by default. But it is very easy to do. Here is a **very short** guide on how to do that: https://forum.snapcraft.io/t/running-snaps-on-wsl2-insiders-only-for-now/13033. You can skip the snap parts.
 
 - Once you've got systemd enabled and running, install open-iscsi:
 
