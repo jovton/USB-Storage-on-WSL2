@@ -174,7 +174,7 @@ Now you use the USB drive from your WSL2 instance to your heart's desire! Mount 
 ## Conclusion
 Using iSCSI, we were able to "fool" WSL2 into thinking it had a physical USB block device attached under "/dev".
 
-<u>NOTE</u>: Our iSCSI target has not been secured with login credentials. Under normal production environment circumstances you would protect it. In this article I was only interested in exploring the idea of simple access to USB storage devices in WSL2 for development increased workflow.
+<u>NOTE</u>: Our iSCSI target has not been secured with login credentials. Under normal production environment circumstances you would protect it. In this article I was only interested in exploring the idea of simple access to USB storage devices in WSL2 for increased development workflow.
 
 I hope you enjoyed this article. Please feel free to contribute by making improvements to this article. :)
 
