@@ -100,7 +100,7 @@ $ sudo modprobe -v libiscsi_tcp
 ```
 
 ### 4. <u>The iSCSI target</u>
-For now, the WSL2 (Linux) part is done. We'll come back to it in a moment. Next we must set up an iSCSI target on our Windows host. I used the "**iSCSIConsole**" application on TalAloni's github repository: https://github.com/TalAloni/iSCSIConsole to create the target. Download and install it. Also, tell him how much you appreciate his work. :)
+For now, the WSL2 (Linux) part is done. We'll come back to it in a moment. Next we must set up an iSCSI target on our Windows host. I used the "**iSCSIConsole**" application on TalAloni's github repository: https://github.com/TalAloni/iSCSIConsole to create the target. Download and install it. Also, tell the author how much you appreciate their work. :)
 
 You'll have to run it with administrator privileges in order to attach a physical disk such as a USB drive. You also may have to allow it through the Windows host firewall to get it to communicate with the WSL2 instance. I attached my USB thumb drive with the default iSCSI target name of "*iqn.1991-05.com.microsoft:target1*".
 
