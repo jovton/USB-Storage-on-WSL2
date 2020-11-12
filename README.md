@@ -72,7 +72,7 @@ File systems --->
 ```
 - Save your config, exit, and then compile and install the kernel along with the selected kernel modules:
 ```
-$ sudo make && make modules_install
+$ sudo make KCONFIG_CONFIG=Microsoft/config-wsl
 ```
 - Copy the new kernel image to your Windows host. My kernel image file was called bzImage:
 ```
