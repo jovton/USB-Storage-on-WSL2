@@ -18,7 +18,7 @@ This article will show you how you can get around these limitations to access yo
 ## Instructions
 
 ### 1. <u>WSL2</u>
-First off, I assume that you have already enabled WSL2 on your Windows installation. If not, you'll have to enable WSL2 first. As at this writing, it's only available to Windows Insiders. Don't worry, it very easy (and free) to set that up. Have a look here at Microsoft's own documentation: https://docs.microsoft.com/en-us/windows/wsl/wsl2-install. Have no fear, it very short and informative.
+First off, I assume that you have already enabled WSL2 on your Windows installation. If not, you'll have to enable WSL2 first. Don't worry, it very easy (and free) to set that up. Have a look here at Microsoft's own documentation: https://docs.microsoft.com/en-us/windows/wsl/install-win10. Have no fear, it very short and informative.
 
 ### 2. <u>iSCSI</u>
 To access your USB storage device under WSL2, you'll be using the iSCSI protocol, which is basically the SCSI protocol wrapped in TCP/IP, which means that when SCSI commands are sent to the device, they are sent over a network connection from WSL2 to your real Windows host that actually hosts the USB device. But for your WSL2 instance to know and understand what iSCSI is and how to utilize it, you will have to compile your own custom kernel and/or kernel modules in order to load and use the iSCSI functionality.
