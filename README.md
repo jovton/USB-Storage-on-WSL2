@@ -74,6 +74,10 @@ File systems --->
 ```
 $ sudo make KCONFIG_CONFIG=Microsoft/config-wsl
 ```
+- Install the newly built iSCSI modules:
+```
+$ sudo make modules_install
+```
 - Copy the new kernel image to your Windows host. My kernel image file was called bzImage:
 ```
 $ cp ./arch/x86_64/boot/bzImage /mnt/c/Users/your-user-name/
