@@ -30,7 +30,7 @@ I will lay out some instructions for you that I've used myself. I'm using Ubuntu
 
 - Install git and some compilers:
 ```
-$ sudo apt install build-essential flex bison libssl-dev libelf-dev libncurses5-dev git bc
+$ sudo apt install build-essential flex bison libssl-dev libelf-dev libncurses5-dev git bc pahole
 ```
 - Clone the Microsoft WSL2 kernel:
 ```
