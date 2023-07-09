@@ -29,18 +29,18 @@ Since WSL2, you have the services of a fully fledged Linux Kernel available to y
 I will lay out some instructions for you that I've used myself. I'm using Ubuntu 18.04 LTS. If you have a different Linux distro, the commands to install packages may differ. If your distro is Debian-based, you can use *apt* / *apt-get* like I have. Red Hat uses *yum*. See your own distro's manual for more information on installing packages. Now, let's get a move on...
 
 - Install git and some compilers:
-```
-$ sudo apt install build-essential flex bison libssl-dev libelf-dev libncurses5-dev git bc pahole
+```bash
+sudo apt install build-essential flex bison libssl-dev libelf-dev libncurses5-dev git bc pahole
 ```
 - Clone the Microsoft WSL2 kernel:
-```
-$ git clone https://github.com/microsoft/WSL2-Linux-Kernel.git
-$ cd WSL2-Linux-Kernel
+```bash
+git clone https://github.com/microsoft/WSL2-Linux-Kernel.git
+cd WSL2-Linux-Kernel
 ```
 - Select the all the relevant features. I used the menu:
-```
-$ export KCONFIG_CONFIG=Microsoft/config-wsl
-$ make menuconfig
+```bash
+export KCONFIG_CONFIG=Microsoft/config-wsl
+make menuconfig
 ```
 
 ```
@@ -59,9 +59,9 @@ Device Drivers --->
         <*> SCSI disk support
         <*> SCSI generic support
         SCSI Transports --->
-        <M> iSCSI Transport Attributes
+            <M> iSCSI Transport Attributes
         [*] SCSI low-level drivers  --->
-        <M> iSCSI Initiator over TCP/IP     
+            <M> iSCSI Initiator over TCP/IP     
 
 File systems ---> 
      <*> FUSE (Filesystem in Userspace) support 
@@ -71,16 +71,16 @@ File systems --->
       [*] TCP/IP networking 
 ```
 - Save your config, exit, and then compile and install the kernel along with the selected kernel modules:
-```
-$ sudo make KCONFIG_CONFIG=Microsoft/config-wsl
+```bash
+sudo make KCONFIG_CONFIG=Microsoft/config-wsl
 ```
 - Install the newly built iSCSI modules:
-```
-$ sudo make modules_install
+```bash
+sudo make modules_install
 ```
 - Copy the new kernel image to your Windows host. My kernel image file was called bzImage:
-```
-$ cp ./arch/x86_64/boot/bzImage /mnt/c/Users/your-user-name/
+```bash
+cp ./arch/x86_64/boot/bzImage /mnt/c/Users/your-user-name/
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*Replace "*your-user-name*" with your actual Windows user account name.*)
 - Create a file on your Windows host's "*Users\your-user-name*" folder called "*.wslconfig*" (note the dot **.** in-front). I used Notepad++ to create the file, because it allows me to save files with names that have only an "*.extension*". Normal Windows Notepad and Windows Explorer won't allow that. Put the following lines in this new file:
@@ -92,15 +92,15 @@ localhostForwarding=true
 ```
 - Exit your WSL2 instance, and reboot your WSL2 instance (use Powershell):
 ```
-> wsl --shutdown
+wsl --shutdown
 ```
 - Open your WSL2 bash session again and load the iSCSI modules. Before you can use iSCSI these modules must always be loaded first.
 
-```
-$ sudo modprobe -v libiscsi
-$ sudo modprobe -v scsi_transport_iscsi
-$ sudo modprobe -v iscsi_tcp
-$ sudo modprobe -v libiscsi_tcp
+```bash
+sudo modprobe -v libiscsi
+sudo modprobe -v scsi_transport_iscsi
+sudo modprobe -v iscsi_tcp
+sudo modprobe -v libiscsi_tcp
 ```
 
 ### 4. <u>The iSCSI target</u>
@@ -119,38 +119,44 @@ Now we must set up a client/initiator on our WSL2 instance. We're going to use a
 
 - Once you've got systemd enabled and running, install open-iscsi:
 
-```
-$ sudo apt install open-iscsi
+```bash
+sudo apt install open-iscsi
 ```
 
 - <s>Edit the "/etc/iscsi/iscsid.conf" and change change "node.startup" value to "automatic".</s> *Setting it to automatic will cause your WSL sessions to start up very slowly next time you reboot, since your "host" IP changes and it will not be able to reconnect.*
 
 - Start the iscsi initiator:
 
-```
-$ sudo /etc/init.d/open-iscsi start
+```bash
+sudo /etc/init.d/open-iscsi start
 ```
 
 - Probe the target and list the storage devices:
 
+```bash
+export WSLHOSTIP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')
+sudo iscsiadm -m discovery -t st -p $WSLHOSTIP
 ```
-$ export WSLHOSTIP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')
-$ sudo iscsiadm -m discovery -t st -p $WSLHOSTIP
-
-172.26.240.1:3260,-1 iqn.1991-05.com.microsoft:target1
-
-$ sudo iscsiadm -m node
-
+Should output the available targets like the following
+```
 172.26.240.1:3260,-1 iqn.1991-05.com.microsoft:target1
 ```
 
-- Now we can connect:
+- Now we can connect to a target:
 
+```bash
+sudo iscsiadm -m node -T "iqn.1991-05.com.microsoft:target1" -p "$WSLHOSTIP:3260" -l
 ```
-$ sudo iscsiadm -m node --targetname "iqn.1991-05.com.microsoft:target1" --portal "$WSLHOSTIP:3260" --login
 
+That command should output something like the following
+```
 Logging in to [iface: default, target: iqn.1991-05.com.microsoft:target1, portal: 172.26.240.1,3260] (multiple)
 Login to [iface: default, target: iqn.1991-05.com.microsoft:target1, portal: 172.26.240.1,3260] successful.
+```
+
+- And we can disconnect from a target once we're done:
+```bash
+sudo iscsiadm -m node -T "iqn.1991-05.com.microsoft:target1" -p "$WSLHOSTIP:3260" -u
 ```
 
 - My USB drive was then listed as */dev/sdb*.
@@ -174,6 +180,22 @@ Device     Boot Start      End  Sectors Size Id Type
 ```
 
 Now you can use the USB drive from your WSL2 instance to your heart's desire! Mount it, format it, encrypt it, anything you wish.
+
+
+## Quick settup
+The following is a quick setup with all the required commands on every reboot of the wsl instance
+```bash
+sudo modprobe -v libiscsi
+sudo modprobe -v scsi_transport_iscsi
+sudo modprobe -v iscsi_tcp
+sudo modprobe -v libiscsi_tcp
+sudo /etc/init.d/open-iscsi start
+export WSLHOSTIP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')
+sudo iscsiadm -m discovery -t st -p $WSLHOSTIP
+sudo iscsiadm -m node -T "iqn.1991-05.com.microsoft:target1" -p "$WSLHOSTIP:3260" -l
+sudo iscsiadm -m node -T "iqn.1991-05.com.microsoft:target1" -p "$WSLHOSTIP:3260" -u
+```
+
 
 ## Conclusion
 Using iSCSI, we were able to "fool" WSL2 into thinking it had a physical USB block device attached under "/dev".
