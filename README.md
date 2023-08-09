@@ -33,6 +33,8 @@ I will lay out some instructions for you that I've used myself. I'm using Ubuntu
 sudo apt install build-essential flex bison libssl-dev libelf-dev libncurses5-dev git bc pahole
 ```
 - Clone the Microsoft WSL2 kernel:
+> **Warning**
+> You **MUST** compile the kernel on a **linux partition** (ie : ext4). It will **NOT** work on a NTFS partition. For more info see [this issue](https://github.com/microsoft/WSL/issues/8319#issuecomment-1110257712).
 ```bash
 git clone https://github.com/microsoft/WSL2-Linux-Kernel.git
 cd WSL2-Linux-Kernel
