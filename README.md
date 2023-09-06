@@ -128,6 +128,8 @@ sudo apt install open-iscsi
 - <s>Edit the "/etc/iscsi/iscsid.conf" and change change "node.startup" value to "automatic".</s> *Setting it to automatic will cause your WSL sessions to start up very slowly next time you reboot, since your "host" IP changes and it will not be able to reconnect.*
 
 - Start the iscsi initiator:
+> [!NOTE]
+> Some distro may not have the `/etc/init.d/open-iscsi` file, e.g., Arch Linux. If you are using Arch Linux, try `sudo systemctl start iscsid` instead.
 
 ```bash
 sudo /etc/init.d/open-iscsi start
