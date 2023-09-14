@@ -133,6 +133,9 @@ sudo apt install open-iscsi
 sudo /etc/init.d/open-iscsi start
 ```
 
+> [!NOTE]
+> Some distro may not have the `/etc/init.d/open-iscsi` file, e.g., Arch Linux. If you are using Arch Linux, try `sudo systemctl start iscsid` instead.
+
 - Probe the target and list the storage devices:
 
 ```bash
