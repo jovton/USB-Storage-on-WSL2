@@ -187,7 +187,7 @@ Device     Boot Start      End  Sectors Size Id Type
 Now you can use the USB drive from your WSL2 instance to your heart's desire! Mount it, format it, encrypt it, anything you wish.
 
 
-## Quick settup
+## Quick setup
 The following is a quick setup with all the required commands on every reboot of the wsl instance
 ```bash
 sudo modprobe -v libiscsi
